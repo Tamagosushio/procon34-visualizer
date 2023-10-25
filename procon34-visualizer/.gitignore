@@ -1,0 +1,17 @@
+.editorconfig
+stdafx.cpp
+stdafx.h
+procon34-visualizer.sln
+procon34-visualizer.vcxproj
+procon34-visualizer.vcxproj.filters
+procon34-visualizer.vcxproj.user
+App/AS_DEBUG
+App/dll
+App/engine
+App/example
+App/icon.ico
+App/Resource.rc
+App/procon34-visualizer(debug).exe
+App/procon34-visualizer.exe
+Intermediate
+.vs
