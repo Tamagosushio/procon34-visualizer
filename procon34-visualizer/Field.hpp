@@ -15,6 +15,8 @@ bool is_in_field(const Point &p);
 class Field {
 public:
 private:
+	int height;
+	int width;
 	// セルの情報を取得する
 	CELL get_cell(const int y, const int x) const;
 	CELL get_cell(const Point p) const;
@@ -28,6 +30,9 @@ private:
 	void display_grid(void) const;
 	// 盤面を表示させる
 	void display_actors(void) const;
+	// グリッド上の座標がグリッドに収まっているか
+	bool is_in_field(const int y, const int x);
+	bool is_in_field(const Point& p);
 	// 盤面情報
 	Array<Array<CELL>> grid;
 };

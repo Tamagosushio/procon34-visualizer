@@ -1,9 +1,7 @@
 ﻿# pragma once
 # include <Siv3D.hpp>
 
-// フィールドの縦横
-int HEIGHT;
-int WIDTH;
+
 // 一つのセルの大きさ(正方形)
 constexpr int CELL_SIZE = 20;
 // フィールドの左上に開ける余白
@@ -40,18 +38,6 @@ struct CELL {
 protected:
 	unsigned char val;
 };
-constexpr CELL CELL::NONE = 0;
-constexpr CELL CELL::POND = 1 << 0;
-constexpr CELL CELL::WALL_RED = 1 << 1;
-constexpr CELL CELL::WALL_BLUE = 1 << 2;
-constexpr CELL CELL::AREA_RED = 1 << 3;
-constexpr CELL CELL::AREA_BLUE = 1 << 4;
-constexpr CELL CELL::CRAFTSMAN_RED = 1 << 5;
-constexpr CELL CELL::CRAFTSMAN_BLUE = 1 << 6;
-constexpr CELL CELL::CASTLE = 1 << 7;
-constexpr CELL CELL::CRAFTSMAN = CELL::CRAFTSMAN_BLUE | CELL::CRAFTSMAN_RED;
-constexpr CELL CELL::WALL = CELL::WALL_BLUE | CELL::WALL_RED;
-constexpr CELL CELL::AREA = CELL::AREA_BLUE | CELL::AREA_RED;
 
 struct TEAM {
 	static const TEAM RED;
@@ -63,7 +49,5 @@ struct TEAM {
 protected:
 	unsigned char val;
 };
-constexpr TEAM TEAM::RED = 0;
-constexpr TEAM TEAM::BLUE = 1;
 
 CELL switch_cell(const CELL type, const TEAM team);

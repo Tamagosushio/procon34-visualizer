@@ -17,7 +17,7 @@ Array<Array<T>> get_2d_array(const JSON& json) {
 	for (const auto& object : json.arrayView()) {
 		Array<T> ary;
 		for (const auto& num : object.arrayView()) {
-			ary << num.get<int>();
+			ary << num.get<T>();
 		}
 		res << ary;
 	}
@@ -37,6 +37,7 @@ struct Scores {
 	int wall_score;
 	int territory_score;
 	int castle_score;
+	Scores(void) {}
 	Scores(const JSON &json){
 		this->wall_score = json[U"wall_score"].get<int>();
 		this->territory_score = json[U"territory_score"].get<int>();
@@ -47,25 +48,28 @@ struct Board {
 	Array<Array<int>> masons;
 	Array<Array<int>> walls;
 	Array<Array<int>> territories;
+	Board(void) {};
 	Board(const JSON &json){
 		this->masons = get_2d_array<int>(json[U"masons"]);
 		this->walls = get_2d_array<int>(json[U"walls"]);
-		this->territories = get_2d_array<int>(json[U"territores"]);
+		this->territories = get_2d_array<int>(json[U"territories"]);
 	}
 };
 struct Turn {
 	int turn;
 	Board board;
-	Scores scores;
+	Array<Scores> scores;
+	Turn(void) {}
 	Turn(const JSON &json){
 		this->turn = json[U"turn"].get<int>();
-		this->board = json[U"board"].get<Board>();
-		this->scores = json[U"scores"].get<Scores>();
+		this->board = Board(json[U"board"]);
+		this->scores = get_1d_array<Scores>(json[U"scores"]);
 	}
 };
 struct MatchJson {
 	int match_id;
 	Array<Turn> turns;
+	MatchJson(void) {}
 	MatchJson(const JSON &json){
 		this->match_id = json[U"match_id"].get<int>();
 		this->turns = get_1d_array<Turn>(json[U"turns"]);
@@ -76,17 +80,20 @@ class LoadMatches {
 public:
 	LoadMatches(void);
 	Array<MatchCSV>& get_match_csv(void);
-	Optional<MatchCSV> get_match_csv(const String& id);
+	MatchCSV get_match_csv(const int& id);
+	Array<Array<CELL>> get_field_csv(const String& type);
+	MatchJson get_match_json(const int &id);
 private:
 	// 試合情報のcsvから読み込み
 	void load_matches_csv(void);
 	const String match_csv_path = U"./matches.csv";
 	Array<MatchCSV> ary_match_csv;
 	// フィールド情報のcsvから読み込み
-	void load_field_csv(void);
+	RegExp reg_field_type = U"[ABC](11|13|15|17|21|25)"_re;
 	const String field_csv_path = U"./field/";
 	// 試合情報のjsonから読み込み
-	void load_match_json(void);
 	const String match_json_path = U"./match_jsons/";
-	Array<MatchJson> ary_match_json;
 };
+
+using App = SceneManager<String, LoadMatches>;
+

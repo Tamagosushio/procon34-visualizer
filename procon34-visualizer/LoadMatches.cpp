@@ -16,14 +16,21 @@ LoadMatches::LoadMatches(void) {
 Array<MatchCSV>& LoadMatches::get_match_csv(void) {
 	return this->ary_match_csv;
 }
-Optional<MatchCSV> LoadMatches::get_match_csv(const String &id){
+MatchCSV LoadMatches::get_match_csv(const int &id){
 	for(const MatchCSV &matchcsv: ary_match_csv){
 		if (matchcsv.match_id == id) {
 			return matchcsv;
 		}
 	}
-	return none;
+	throw Error{ U"Failed to search id={} match csv !!"_fmt(id) };
 }
+
+MatchJson LoadMatches::get_match_json(const int& id) {
+	const JSON json = JSON::Load(match_json_path + U"{}.json"_fmt(id));
+	return MatchJson(json);
+}
+
+
 void LoadMatches::load_matches_csv(void) {
 	const CSV csv{ match_csv_path };
 	if (not csv) {
@@ -39,6 +46,34 @@ void LoadMatches::load_matches_csv(void) {
 		ary_match_csv << matchcsv;
 	}
 }
+
+Array<Array<CELL>> LoadMatches::get_field_csv(const String &type) {
+	assert(reg_field_type.fullMatch(type));
+	FilePath path = field_csv_path + type + U".csv";
+	const CSV csv{ path };
+	if (not csv) {
+		throw Error{ U"Failed to load" + path };
+	}
+	int height = csv.rows();
+	int width = csv.columns(0);
+	Array<Array<CELL>> ary2d(height, Array<CELL>(width, CELL::NONE));
+	for (int row = 0; row < height; row++) {
+		for (int col = 0; col < width; col++) {
+			String target_cell = csv[row][col];
+			if (target_cell == U"1") {
+				ary2d[row][col] |= CELL::POND;
+			}else if(target_cell == U"2"){
+				ary2d[row][col] |= CELL::CASTLE;
+			}else if(target_cell == U"a"){
+				ary2d[row][col	] |= CELL::CRAFTSMAN_RED;
+			}else if(target_cell == U"b"){
+				ary2d[row][col] |= CELL::CRAFTSMAN_BLUE;
+			}
+		}
+	}
+	return ary2d;
+}
+
 
 
 

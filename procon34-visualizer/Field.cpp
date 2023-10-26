@@ -20,10 +20,10 @@ constexpr Circle get_grid_circle(const Point &p){
 }
 
 // グリッド上の座標がグリッドに収まっているか
-bool is_in_field(const int y, const int x) {
-	return 0 <= y and y < HEIGHT and 0 <= x and x < WIDTH;
+bool Field::is_in_field(const int y, const int x) {
+	return 0 <= y and y < height and 0 <= x and x < width;
 }
-bool is_in_field(const Point &p) {
+bool Field::is_in_field(const Point &p) {
 	return is_in_field(p.y, p.x);
 }
 
@@ -52,15 +52,15 @@ void Field::delete_bit(const Point p, const CELL delete_bit) {
 
 
 void Field::display_grid(void) const {
-	for (int i = 0; i < HEIGHT * WIDTH; i++) {
-		get_grid_rect(Point(i % WIDTH, i / WIDTH)).drawFrame(1, 1, Palette::Black);
+	for (int i = 0; i < height * width; i++) {
+		get_grid_rect(Point(i % width, i / width)).drawFrame(1, 1, Palette::Black);
 	}
 }
 
 void Field::display_actors(void) const {
-	for (int i = 0; i < (HEIGHT * WIDTH); i++) {
-		const int y = i / WIDTH;
-		const int x = i % WIDTH;
+	for (int i = 0; i < (height * width); i++) {
+		const int y = i / width;
+		const int x = i % width;
 		const Point p(x, y);
 		const CELL target_cell = grid[y][x];
 
