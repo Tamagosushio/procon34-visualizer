@@ -27,7 +27,7 @@ Array<Array<T>> get_2d_array(const JSON& json) {
 
 struct MatchCSV {
 	String match_name;
-	String field;
+	String field_type;
 	String team1;
 	String team2;
 	int match_id;
@@ -66,11 +66,11 @@ struct Turn {
 		this->scores = get_1d_array<Scores>(json[U"scores"]);
 	}
 };
-struct MatchJson {
+struct MatchJSON {
 	int match_id;
 	Array<Turn> turns;
-	MatchJson(void) {}
-	MatchJson(const JSON &json){
+	MatchJSON(void) {}
+	MatchJSON(const JSON &json){
 		this->match_id = json[U"match_id"].get<int>();
 		this->turns = get_1d_array<Turn>(json[U"turns"]);
 	}
@@ -79,10 +79,10 @@ struct MatchJson {
 class LoadMatches {
 public:
 	LoadMatches(void);
-	Array<MatchCSV>& get_match_csv(void);
-	MatchCSV get_match_csv(const int& id);
-	Array<Array<CELL>> get_field_csv(const String& type);
-	MatchJson get_match_json(const int &id);
+	const Array<MatchCSV>& get_match_csv(void) const;
+	MatchCSV get_match_csv(const int& id) const;
+	Array<Array<CELL>> get_field_csv(const String& type) const;
+	MatchJSON get_match_json(const int &id) const;
 private:
 	// 試合情報のcsvから読み込み
 	void load_matches_csv(void);
@@ -95,5 +95,4 @@ private:
 	const String match_json_path = U"./match_jsons/";
 };
 
-using App = SceneManager<String, LoadMatches>;
 

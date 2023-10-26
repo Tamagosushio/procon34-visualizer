@@ -33,3 +33,4 @@ CELL switch_cell(const CELL type, const TEAM team) {
 		return CELL::NONE;
 	}
 }
+

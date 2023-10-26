@@ -13,10 +13,10 @@ LoadMatches::LoadMatches(void) {
 // 第1対戦では、team1が先攻、第2対戦ではteam2が先攻になります。
 // 試合名, フィールド, team1, team2, match_id
 // -----------------------------------------------------------------------------------------------
-Array<MatchCSV>& LoadMatches::get_match_csv(void) {
+const Array<MatchCSV>& LoadMatches::get_match_csv(void) const{
 	return this->ary_match_csv;
 }
-MatchCSV LoadMatches::get_match_csv(const int &id){
+MatchCSV LoadMatches::get_match_csv(const int &id)const{
 	for(const MatchCSV &matchcsv: ary_match_csv){
 		if (matchcsv.match_id == id) {
 			return matchcsv;
@@ -25,29 +25,12 @@ MatchCSV LoadMatches::get_match_csv(const int &id){
 	throw Error{ U"Failed to search id={} match csv !!"_fmt(id) };
 }
 
-MatchJson LoadMatches::get_match_json(const int& id) {
+MatchJSON LoadMatches::get_match_json(const int& id)const {
 	const JSON json = JSON::Load(match_json_path + U"{}.json"_fmt(id));
-	return MatchJson(json);
+	return MatchJSON(json);
 }
 
-
-void LoadMatches::load_matches_csv(void) {
-	const CSV csv{ match_csv_path };
-	if (not csv) {
-		throw Error{ U"Failed to load " + match_csv_path };
-	}
-	for (int row = 0; row < csv.rows(); row++) {
-		MatchCSV matchcsv;
-		matchcsv.match_name = csv[row][0];
-		matchcsv.field = csv[row][1];
-		matchcsv.team1= csv[row][2];
-		matchcsv.team2= csv[row][3];
-		matchcsv.match_id = Parse<int>(csv[row][4]);
-		ary_match_csv << matchcsv;
-	}
-}
-
-Array<Array<CELL>> LoadMatches::get_field_csv(const String &type) {
+Array<Array<CELL>> LoadMatches::get_field_csv(const String &type)const {
 	assert(reg_field_type.fullMatch(type));
 	FilePath path = field_csv_path + type + U".csv";
 	const CSV csv{ path };
@@ -75,6 +58,22 @@ Array<Array<CELL>> LoadMatches::get_field_csv(const String &type) {
 }
 
 
+
+void LoadMatches::load_matches_csv(void) {
+	const CSV csv{ match_csv_path };
+	if (not csv) {
+		throw Error{ U"Failed to load " + match_csv_path };
+	}
+	for (int row = 0; row < csv.rows(); row++) {
+		MatchCSV matchcsv;
+		matchcsv.match_name = csv[row][0];
+		matchcsv.field_type = csv[row][1];
+		matchcsv.team1 = csv[row][2];
+		matchcsv.team2 = csv[row][3];
+		matchcsv.match_id = Parse<int>(csv[row][4]);
+		ary_match_csv << matchcsv;
+	}
+}
 
 
 

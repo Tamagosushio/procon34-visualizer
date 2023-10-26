@@ -1,19 +1,22 @@
 ﻿# pragma once
 # include <Siv3D.hpp> // Siv3D v0.6.12
-# include "Base.hpp"
+# include "Data.hpp"
+# include "MatchNameListScene.hpp"
 # include "MatchListScene.hpp"
-# include "Field.hpp"
-# include "LoadMatches.hpp"
+# include "FieldScene.hpp"
 
 void Main(){
 
 	Window::Resize(1280, 720);
 	Window::SetStyle(WindowStyle::Frameless);
 	Scene::SetBackground(Palette::Gray);
-	LoadMatches loadmatches;
 
 	App manager;
-	manager.add<MatchListScene>(U"ListScene");
+	manager.add<MatchNameListScene>(U"MatchNameListScene");
+	manager.add<MatchListScene>(U"MatchListScene");
+	manager.add<FieldScene>(U"FieldScene");
+
+	manager.init(U"MatchNameListScene");
 
 
 	while (System::Update()){
