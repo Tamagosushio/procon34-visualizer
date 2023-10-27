@@ -177,8 +177,8 @@ void FieldScene::draw_actors(void) const {
 	}
 }
 void FieldScene::draw_details(void) const {
-	Scores scores_first = turns[turn_num_now].scores[(match_id+1) % 2];
-	Scores scores_second = turns[turn_num_now].scores[(match_id+0) % 2];
+	Scores scores_first = turns[turn_num_now].scores[0];
+	Scores scores_second = turns[turn_num_now].scores[1];
 
 	int x = Scene::Center().x + cell_size*2;
 	font_details(U"{}: {}pt"_fmt(team1, scores_first.wall_score+scores_first.territory_score+scores_first.castle_score))
@@ -220,8 +220,8 @@ void FieldScene::draw_graph() const {
 	}
 	// 座標から線分で結ぶ
 	for(int idx = 0; idx <= turn_num_now -1; idx++){
-		Line{ coordinates[idx][(match_id + 1) % 2], coordinates[idx + 1][(match_id + 1) % 2] }.draw(line_thick, Palette::Red);
-		Line{ coordinates[idx][match_id % 2], coordinates[idx + 1][match_id % 2] }.draw(line_thick, Palette::Blue);
+		Line{ coordinates[idx][0], coordinates[idx + 1][0] }.draw(line_thick, Palette::Red);
+		Line{ coordinates[idx][1], coordinates[idx + 1][1] }.draw(line_thick, Palette::Blue);
 	}
 	// 縦軸横軸の矢印を描画
 	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x, lefttop_graph.y }.drawArrow(line_thick, Vec2{ cell_size, cell_size }, Palette::Black);
