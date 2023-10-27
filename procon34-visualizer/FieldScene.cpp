@@ -224,8 +224,8 @@ void FieldScene::draw_graph() const {
 		Line{ coordinates[idx][1], coordinates[idx + 1][1] }.draw(line_thick, Palette::Blue);
 	}
 	// 縦軸横軸の矢印を描画
-	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x, lefttop_graph.y }.drawArrow(line_thick, Vec2{ cell_size, cell_size }, Palette::Black);
-	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x + size_graph.x, lefttop_graph.y + size_graph.y }.drawArrow(line_thick, Vec2{ cell_size, cell_size }, Palette::Black);
+	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x, lefttop_graph.y }.drawArrow(line_thick*2, Vec2{ cell_size, cell_size }, Palette::Black);
+	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x + size_graph.x, lefttop_graph.y + size_graph.y }.drawArrow(line_thick*2, Vec2{ cell_size, cell_size }, Palette::Black);
 }
 
 
