@@ -9,7 +9,7 @@ void Main(){
 
 	Window::Resize(1280, 720);
 	Window::SetStyle(WindowStyle::Sizable);
-	Scene::SetBackground(Palette::Gray);
+	Scene::SetBackground(Palette::Silver);
 
 	App manager;
 	manager.add<MatchNameListScene>(U"MatchNameListScene");

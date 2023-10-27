@@ -181,14 +181,14 @@ void FieldScene::draw_details(void) const {
 	Scores scores_second = turns[turn_num_now].scores[1];
 
 	int x = Scene::Center().x + cell_size*2;
-	font_details(U"{}: {}pt"_fmt(team1, scores_first.wall_score+scores_first.territory_score+scores_first.castle_score))
+	font_details(U"{}: {}pt"_fmt(team1, scores_first.wall_score + scores_first.territory_score + scores_first.castle_score))
 		.draw(font_size, x, blank_top, Palette::Red);
 	font_details(U"城壁:{}  陣地:{}  城:{}"_fmt(scores_first.wall_score/10, scores_first.territory_score/30, scores_first.castle_score/100))
-		.draw(font_size/2, x, blank_top+font_size+cell_size, Palette::Black);
+		.draw(font_size/2, x + cell_size, blank_top+font_size+cell_size/2, Palette::Black);
 	font_details(U"{}: {}pt"_fmt(team2, scores_second.wall_score + scores_second.territory_score + scores_second.castle_score))
 		.draw(font_size, x, blank_top + (font_size+cell_size) * 1.5, Palette::Blue);
 	font_details(U"城壁:{}  陣地:{}  城:{}"_fmt(scores_second.wall_score / 10, scores_second.territory_score / 30, scores_second.castle_score / 100))
-		.draw(font_size / 2, x, blank_top + (font_size+cell_size) * 2.5, Palette::Black);
+		.draw(font_size / 2, x + cell_size, blank_top + font_size*2.5 + cell_size*2.0, Palette::Black);
 	font_details(U"ターン数: {}/{}"_fmt(turn_num_now, turn_num_limit))
 		.draw(font_size, x, blank_top + (font_size+cell_size) * 3.0, Palette::Black);
 

@@ -59,7 +59,7 @@ private:
 	int image_radius;
 	// 詳細表示のフォント
 	int font_size = 100;
-	const Font font_details = Font(FontMethod::SDF, font_size, U"SourceHanSansJP-Medium.otf");
+	const Font font_details = Font(FontMethod::SDF, font_size, U"SourceHanSansJP-Bold.otf");
 	Arg::topCenter_<Vec2> anchor_play_button;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
 	// グラフ描画
