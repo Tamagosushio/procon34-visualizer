@@ -16,7 +16,7 @@ void MatchNameListScene::update(void) {
 	for (auto iter = st.begin(); iter != st.end(); iter++, cnt++) {
 		if (SimpleGUI::Button(*iter, { 50, 50 * cnt })) {
 			getData().set_match_name(*iter);
-			changeScene(U"MatchListScene");
+			changeScene(U"MatchListScene", 0s);
 		}
 	}
 }

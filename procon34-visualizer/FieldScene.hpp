@@ -52,11 +52,11 @@ private:
 	// フィールドの左上に開ける余白
 	int blank_left = 50;
 	int blank_top = 50;
-	// 再生、停止ボタンの画像
+	// 再生、停止、戻るボタンの画像
 	const Texture image_play = Texture(U"./images/再生ボタン.png");
 	const Texture image_stop = Texture(U"./images/一時停止ボタン.png");
 	const Texture image_return = Texture(U"./images/Uターン矢印.png");
-	int image_radius = cell_size * 2;
+	int image_radius;
 	// 詳細表示のフォント
 	int font_size = 100;
 	const Font font_details = Font(FontMethod::SDF, font_size, U"SourceHanSansJP-Medium.otf");

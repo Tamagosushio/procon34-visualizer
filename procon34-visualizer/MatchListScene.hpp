@@ -9,11 +9,13 @@ public:
 	void update(void) override;
 	void draw(void) const override;
 private:
-	// SimpleGUIを用いないボタン表示
-	void draw_buttons(void) const;
 	void update_buttons(void);
 	void update_scroll(void);
-	void update_button_size(void);
+	void update_responsive(void);
+
+	// SimpleGUIを用いないボタン表示
+	void draw_buttons(void) const;
+	void draw_images(void) const;
 
 	Rect get_rect_button(const int cnt) const;
 
@@ -32,7 +34,10 @@ private:
 	const Color button_color = Color(Palette::Skyblue);
 	// ボタンに使うフォント
 	Font font_button{ FontMethod::SDF, 50, U"SourceHanSansJP-Medium.otf"};
-
+	// 戻るボタン
+	int image_radius = button_height / 2;
+	Arg::bottomLeft_<Vec2> anchor_return_button;
+	const Texture image_return = Texture(U"./images/Uターン矢印.png");
 };
 
 

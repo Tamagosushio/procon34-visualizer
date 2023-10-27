@@ -66,13 +66,13 @@ void FieldScene::update_turn(void) {
 // GUI更新
 void FieldScene::update_gui(void) {
 	// 時間経過による再生の有無
-	if (Circle(anchor_play_button, image_radius/2).leftClicked()) {
+	if (Circle(anchor_play_button, image_radius).leftClicked()) {
 		stopwatch.reset();
 		is_paused ^= true;
 	}
 	// 戻るボタン
-	if (Circle(anchor_return_button, image_radius/2).leftClicked()) {
-		changeScene(U"MatchListScene");
+	if (Circle(anchor_return_button, image_radius).leftClicked()) {
+		changeScene(U"MatchListScene", 0s);
 	}
 	// GUIによるターン遷移
 	double turn_rate = (double)turn_num_now / (double)turn_num_limit;
@@ -195,9 +195,9 @@ void FieldScene::draw_details(void) const {
 }
 void FieldScene::draw_images(void) const {
 	// 再生 /  停止ボタンの描画
-	(is_paused ? image_play : image_stop).resized(image_radius).draw(anchor_play_button);
+	(is_paused ? image_play : image_stop).resized(image_radius*2).draw(anchor_play_button);
 	// 戻るボタン
-	image_return.resized(image_radius).draw(anchor_return_button);
+	image_return.resized(image_radius*2).draw(anchor_return_button);
 }
 void FieldScene::draw_graph() const {
 	// 範囲内での最大値を求める
@@ -232,7 +232,7 @@ void FieldScene::draw_graph() const {
 void FieldScene::update_responsive(void) {
 	this->cell_size = Min(Scene::Center().x / (width + 4), Scene::Size().y * 2 / 3 / height);
 	this->blank_left = cell_size * 2;
-	this->image_radius = cell_size * 2;
+	this->image_radius = cell_size;
 	this->font_size = cell_size * height / 2 / 5;
 	this->anchor_play_button = Arg::topCenter(Scene::Center().x, blank_top);
 	this->anchor_return_button = Arg::bottomLeft(cell_size, Scene::Size().y - cell_size);
