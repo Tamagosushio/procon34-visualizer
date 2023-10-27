@@ -12,8 +12,8 @@ private:
 	// SimpleGUIを用いないボタン表示
 	void draw_buttons(void) const;
 	void update_buttons(void);
-	// マウスによるスクロール
 	void update_scroll(void);
+	void update_button_size(void);
 
 	Rect get_rect_button(const int cnt) const;
 
@@ -22,18 +22,16 @@ private:
 
 	// スクロールで移動する添え字
 	int scroll_idx = 0;
-	// メニュータブの高さ
-	const int blank_height = 100;
 	// ボタンの高さ
-	const int button_height = 60;
+	int button_height = 100;
 	// ボタンの幅
 	int button_width = Scene::Size().x / 3;
 	// ボタンの上下間隔
-	const int button_blank_y = 10;
+	int button_blank_y = button_height / 3;
 	// ボタンの色
-	const Color button_color = Color(Palette::Skyblue).setA(128);
+	const Color button_color = Color(Palette::Skyblue);
 	// ボタンに使うフォント
-	Font font_button{50, U"SourceHanSansJP-Medium.otf"}; 
+	Font font_button{ FontMethod::SDF, 50, U"SourceHanSansJP-Medium.otf"};
 
 };
 
