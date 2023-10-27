@@ -18,7 +18,7 @@ private:
 	MatchJSON matchjson;
 	// 現在のターンの試合情報
 	Array<Turn> turns;
-	
+		
 	int match_id;
 	String field_type;
 	int height, width;
@@ -38,9 +38,9 @@ private:
 	void draw_actors(void) const;
 	void draw_details(void) const;
 	void draw_images(void) const;
+	void draw_graph(void) const;
 
-
-	// 盤面情報
+		// 盤面情報
 	Array<Array<CELL>> grid;
 	// 時間経過でターンを進めるためのストップウォッチ
 	Stopwatch stopwatch;
@@ -62,6 +62,11 @@ private:
 	const Font font_details = Font(FontMethod::SDF, font_size, U"SourceHanSansJP-Medium.otf");
 	Arg::topCenter_<Vec2> anchor_play_button;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
+	// グラフ描画
+	Array<Array<int>> points;
+	Vec2 lefttop_graph;
+	Size size_graph;
+	double line_thick = 1.5;
 
 	// グリッド上の中心座標、四角形、円を取得
 	const Point get_cell_center(const Point& p) const;

@@ -20,6 +20,15 @@ FieldScene::FieldScene(const InitData &init) : IScene(init) {
 	this->turn_num_pre = this->turn_num_now = 0;
 	this->turn_num_limit = matchjson.turns.size() - 1;
 	this->turns = getData().get_loadmatches().get_match_json(match_id).turns;
+	// ターンごとの得点をセット
+	for(const Turn &turn: matchjson.turns){
+		Array<int> ary;
+		for(const Scores &scores: turn.scores){
+			int total = scores.wall_score + scores.territory_score + scores.castle_score;
+			ary << total;
+		}
+		points << ary;
+	}
 	// 初フレームをレスポンシブにする
 	update_responsive();
 }
@@ -31,6 +40,7 @@ void FieldScene::draw(void) const {
 	draw_actors();
 	draw_details();
 	draw_images();
+	draw_graph();
 }
 
 
@@ -189,6 +199,35 @@ void FieldScene::draw_images(void) const {
 	// 戻るボタン
 	image_return.resized(image_radius).draw(anchor_return_button);
 }
+void FieldScene::draw_graph() const {
+	// 範囲内での最大値を求める
+	int max_point = 1;
+	for(int idx = 0; idx <= turn_num_now; idx++){
+		for (const int &num : points[idx]) {
+			max_point = Max(max_point, num);
+		}
+	}
+	// 各ターン各チームの得点に対する座標を計算
+	Array<Array<Vec2>> coordinates;
+	for(int idx = 0; idx <= turn_num_now; idx++){
+		Array<Vec2> ary;
+		for(const int &num : points[idx]){
+			const double x = (double)lefttop_graph.x + (double)size_graph.x * ((double)idx / (double)turn_num_now);
+			const double y = (double)lefttop_graph.y + (double)size_graph.y - (double)size_graph.y * ((double)num / (double)max_point);
+			ary << Vec2(x, y);
+		}
+		coordinates << ary;
+	}
+	// 座標から線分で結ぶ
+	for(int idx = 0; idx <= turn_num_now -1; idx++){
+		Line{ coordinates[idx][(match_id + 1) % 2], coordinates[idx + 1][(match_id + 1) % 2] }.draw(line_thick, Palette::Red);
+		Line{ coordinates[idx][match_id % 2], coordinates[idx + 1][match_id % 2] }.draw(line_thick, Palette::Blue);
+	}
+	// 縦軸横軸の矢印を描画
+	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x, lefttop_graph.y }.drawArrow(line_thick, Vec2{ cell_size, cell_size }, Palette::Black);
+	Line{ lefttop_graph.x, lefttop_graph.y + size_graph.y, lefttop_graph.x + size_graph.x, lefttop_graph.y + size_graph.y }.drawArrow(line_thick, Vec2{ cell_size, cell_size }, Palette::Black);
+}
+
 
 void FieldScene::update_responsive(void) {
 	this->cell_size = Min(Scene::Center().x / (width + 4), Scene::Size().y * 2 / 3 / height);
@@ -197,6 +236,8 @@ void FieldScene::update_responsive(void) {
 	this->font_size = cell_size * height / 2 / 5;
 	this->anchor_play_button = Arg::topCenter(Scene::Center().x, blank_top);
 	this->anchor_return_button = Arg::bottomLeft(cell_size, Scene::Size().y - cell_size);
+	this->lefttop_graph = Vec2(Scene::Center().x, cell_size * height * 0.75);
+	this->size_graph = Size(Scene::Size().x - (int)lefttop_graph.x - cell_size, Scene::Size().y - (int)lefttop_graph.y - cell_size);
 }
 
 // フィールドの座標を引数に、セルの中心の画面上の座標を返す
