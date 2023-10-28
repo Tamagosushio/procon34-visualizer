@@ -33,7 +33,7 @@ void MatchListScene::update_buttons(void) {
 			if (button_rect.leftClicked()) {
 				getData().set_match_id(matchcsv.match_id);
 				getData().set_field_type(matchcsv.field_type);
-				changeScene(U"FieldScene");
+				changeScene(U"FieldScene", 0s);
 			}
 		}
 		cnt++;
