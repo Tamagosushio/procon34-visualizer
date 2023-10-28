@@ -64,8 +64,9 @@ private:
 	Arg::bottomLeft_<Vec2> anchor_return_button;
 	// グラフ描画
 	Array<Array<int>> points;
-	Vec2 lefttop_graph;
-	Size size_graph;
+	Vec2 graph_lefttop;
+	Size graph_size;
+	int graph_scale = 3;
 	double line_thick = 1.5;
 
 	// グリッド上の中心座標、四角形、円を取得
