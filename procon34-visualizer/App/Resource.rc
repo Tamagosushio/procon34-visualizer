@@ -384,8 +384,8 @@ Resource(./field/C17.csv)
 Resource(./field/C21.csv)
 Resource(./field/C25.csv)
 Resource(./matches.csv)
-Resource(./SourceHanSansJP-Bold.otf)
-Resource(./SourceHanSansJP-Medium.otf)
+Resource(SourceHanSansJP-Bold.otf)
+Resource(SourceHanSansJP-Medium.otf)
 
 /* examples 
 
