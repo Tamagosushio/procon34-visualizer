@@ -26,14 +26,14 @@ MatchCSV LoadMatches::get_match_csv(const int &id)const{
 }
 
 MatchJSON LoadMatches::get_match_json(const int& id)const {
-	const JSON json = JSON::Load(match_json_path + U"{}.json"_fmt(id));
+	const JSON json = JSON::Load(Resource(match_json_path + U"{}.json"_fmt(id)));
 	return MatchJSON(json);
 }
 
 Array<Array<CELL>> LoadMatches::get_field_csv(const String &type)const {
 	assert(reg_field_type.fullMatch(type));
 	FilePath path = field_csv_path + type + U".csv";
-	const CSV csv{ path };
+	const CSV csv{ Resource(path) };
 	if (not csv) {
 		throw Error{ U"Failed to load" + path };
 	}
@@ -60,7 +60,7 @@ Array<Array<CELL>> LoadMatches::get_field_csv(const String &type)const {
 
 
 void LoadMatches::load_matches_csv(void) {
-	const CSV csv{ match_csv_path };
+	const CSV csv{ Resource(match_csv_path) };
 	if (not csv) {
 		throw Error{ U"Failed to load " + match_csv_path };
 	}

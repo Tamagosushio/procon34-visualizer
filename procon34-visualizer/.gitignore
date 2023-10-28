@@ -10,7 +10,6 @@ App/dll
 App/engine
 App/example
 App/icon.ico
-App/Resource.rc
 App/procon34-visualizer(debug).exe
 App/procon34-visualizer.exe
 Intermediate

@@ -33,11 +33,11 @@ private:
 	// ボタンの色
 	const Color button_color = Color(Palette::Skyblue);
 	// ボタンに使うフォント
-	Font font_button{ FontMethod::SDF, 50, U"SourceHanSansJP-Medium.otf"};
+	Font font_button{ FontMethod::SDF, 50, Resource(U"SourceHanSansJP-Medium.otf") };
 	// 戻るボタン
 	int image_radius = button_height / 2;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
-	const Texture image_return = Texture(U"./images/Uターン矢印.png");
+	const Texture image_return = Texture(Resource(U"./images/return.png"));
 };
 
 
