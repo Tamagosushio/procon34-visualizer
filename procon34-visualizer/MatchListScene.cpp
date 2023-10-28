@@ -45,10 +45,11 @@ void MatchListScene::update_buttons(void) {
 void MatchListScene::update_scroll(void) {
 	// スクロールは上下で制限をかける
 	if (Mouse::Wheel() > 0) {
-		scroll_idx = Min<int>(scroll_idx + 1, Math::Ceil((double)(button_height * (matches.size() / 2) + button_blank_y * (matches.size() / 2 + 1) - Scene::Size().y) / (button_height + button_blank_y)));
-	}
-	else if (Mouse::Wheel() < 0) {
-		scroll_idx = Max(scroll_idx - 1, 0);
+		double numerator = (double)button_height * ((double)matches.size() / 2.0) + (double)button_blank_y * ((double)matches.size() / 2.0 + 1.0) - (double)Scene::Size().y;
+		double denominator = (double)button_height + (double)button_blank_y;
+		scroll_idx = Max<int>(Min<int>(scroll_idx + 1, Math::Ceil(numerator / denominator)), 0);
+	}else if (Mouse::Wheel() < 0) {
+		scroll_idx = Max<int>(scroll_idx - 1, 0);
 	}
 }
 void MatchListScene::update_responsive(void) {
