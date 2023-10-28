@@ -65,7 +65,7 @@ void MatchListScene::draw_buttons(void) const {
 	for(const MatchCSV &matchcsv : matches ){
 		Rect button_rect = get_rect_button(cnt);
 		button_rect.draw(button_color).drawFrame(1, 1, Palette::Black);
-		const String button_lebel = U"{} VS {}"_fmt(matchcsv.team1, matchcsv.team2);
+		const String button_lebel = ((matchcsv.match_id % 2 == 1) ? U"先: {} VS {} :後"_fmt : U"後: {} VS {} :先"_fmt)(matchcsv.team1, matchcsv.team2);
 		// ボタンの四角形の中に収まる最大のフォントサイズを二分探索
 		int left = 0, right = 1000;
 		while (Abs(right - left) > 1) {
