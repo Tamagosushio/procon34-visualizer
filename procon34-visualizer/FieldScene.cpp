@@ -66,7 +66,7 @@ void FieldScene::update_turn(void) {
 // GUI更新
 void FieldScene::update_gui(void) {
 	// 時間経過による再生の有無
-	if (Circle(anchor_play_button, image_radius).leftClicked()) {
+	if (Circle(anchor_play_button, image_radius).leftClicked() or KeySpace.down()) {
 		stopwatch.reset();
 		is_paused ^= true;
 	}
@@ -82,10 +82,10 @@ void FieldScene::update_gui(void) {
 		stopwatch.restart();
 	}
 	// ボタンによるターン遷移
-	if (Circle(anchor_arrow_left, image_radius * 0.75).leftClicked()) {
+	if (Circle(anchor_arrow_left, image_radius * 0.75).leftClicked() or KeyLeft.down()) {
 		turn_num_now = Max(turn_num_now - 1, 0);
 	}
-	if (Circle(anchor_arrow_right, image_radius * 0.75).leftClicked()) {
+	if (Circle(anchor_arrow_right, image_radius * 0.75).leftClicked() or KeyRight.down()) {
 		turn_num_now = Min(turn_num_now + 1, turn_num_limit);
 	}
 }
