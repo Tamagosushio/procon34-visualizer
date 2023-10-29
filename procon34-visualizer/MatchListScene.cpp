@@ -56,7 +56,7 @@ void MatchListScene::update_responsive(void) {
 	this->button_width = Scene::Size().x / 3;
 	this->button_height = Scene::Size().y / 10;
 	this->button_blank_y = button_height / 3;
-	this->anchor_return_button = Arg::bottomLeft(button_height, Scene::Size().y - button_height);
+	this->anchor_return_button = Arg::bottomLeft(button_blank_y, Scene::Size().y - button_blank_y);
 	this->image_radius = button_height / 2;
 }
 
@@ -64,21 +64,36 @@ void MatchListScene::draw_buttons(void) const {
 	int cnt = 0;
 	for(const MatchCSV &matchcsv : matches ){
 		Rect button_rect = get_rect_button(cnt);
-		button_rect.rounded(10).draw(button_color).drawFrame(1, 1, Palette::Black);
-		const String button_lebel = ((matchcsv.match_id % 2 == 1) ? U"(先){} VS {}(後)"_fmt : U"(後){} VS {}(先)"_fmt)(matchcsv.team1, matchcsv.team2);
-		// ボタンの四角形の中に収まる最大のフォントサイズを二分探索
-		int left = 0, right = 1000;
-		while (Abs(right - left) > 1) {
-			int mid = (left + right) / 2;
-			if (font_button(button_lebel).draw(mid, button_rect.stretched(-5), HSV(0,0,0,0))) {
-				left = mid;
-			}else {
-				right = mid;
-			}
-		}
-		font_button(button_lebel).draw(left, button_rect.stretched(-5), Palette::Black);
+		button_rect = draw_button_rect(button_rect, button_color, button_shadow_color);
+		const String button_label = ((matchcsv.match_id % 2 == 1) ? U"(先){} VS {}(後)"_fmt : U"(後){} VS {}(先)"_fmt)(matchcsv.team1, matchcsv.team2);
+		draw_button_label(button_label, button_rect, font_button, Palette::White);
 		cnt++;
 	}
+}
+Rect MatchListScene::draw_button_rect(Rect rect, HSV button_color, const HSV&shadow_color)const {
+	Vec2 shadow{ 0, rect.h / 10 };
+	if (rect.mouseOver()) {
+		button_color = button_color.setS(button_color.s * 4  / 5);
+	}
+	if(rect.leftPressed()){
+		rect = rect.stretched(-rect.h / 5, 0, shadow.y, 0);
+		rect.rounded(10).draw(button_color);
+	}else {
+		rect.rounded(10).drawShadow(shadow, 5, 0, shadow_color).draw(button_color);
+	}
+	return rect;
+}
+void MatchListScene::draw_button_label(const String &label, const Rect &rect, const Font &font, const HSV &color)const {
+	int left = 0, right = 1000;
+	while (Abs(right - left) > 1) {
+		int mid = (left + right) / 2;
+		if (font(label).draw(mid, rect.stretched(-rect.h / 20), HSV{ 0,0 })) {
+			left = mid;
+		}else{
+			right = mid;
+		}
+	}
+	font(label).drawAt(left, rect.center(), color);
 }
 void MatchListScene::draw_images(void)const {
 	// 戻るボタン

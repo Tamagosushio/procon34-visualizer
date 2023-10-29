@@ -15,6 +15,8 @@ private:
 
 	// SimpleGUIを用いないボタン表示
 	void draw_buttons(void) const;
+	Rect draw_button_rect(Rect rect, HSV button_color, const HSV &shadow_color)const;
+	void draw_button_label(const String &lable, const Rect &rect, const Font &font, const HSV &color)const;
 	void draw_images(void) const;
 
 	Rect get_rect_button(const int cnt) const;
@@ -31,7 +33,8 @@ private:
 	// ボタンの上下間隔
 	int button_blank_y = button_height / 3;
 	// ボタンの色
-	const Color button_color = Color(Palette::Skyblue);
+	const HSV button_color{ 199, 0.88, 0.96 };
+	const HSV button_shadow_color{ 199, 0.88, 0.60 };
 	// ボタンに使うフォント
 	Font font_button{ FontMethod::SDF, 50, Resource(U"SourceHanSansJP-Medium.otf") };
 	// 戻るボタン
