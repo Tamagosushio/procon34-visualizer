@@ -9,7 +9,12 @@ public:
 	void update(void) override;
 	void draw(void) const override;
 private:
+	void update_responsive(void);
+	int button_height;
+	int button_width;
+	int button_blank;
 	LoadMatches loadmatches;
-	Array<String> st;
+	Array<String> st;\
+	Font font_button{ FontMethod::SDF, 50, Resource(U"SourceHanSansJP-Medium.otf") };
 };
 
