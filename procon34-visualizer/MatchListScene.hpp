@@ -15,6 +15,8 @@ private:
 
 	// SimpleGUIを用いないボタン表示
 	void draw_buttons(void) const;
+	Rect draw_button_rect(Rect rect, HSV button_color, const HSV &shadow_color)const;
+	void draw_button_label(const String &lable, const Rect &rect, const Font &font, const HSV &color)const;
 	void draw_images(void) const;
 
 	Rect get_rect_button(const int cnt) const;

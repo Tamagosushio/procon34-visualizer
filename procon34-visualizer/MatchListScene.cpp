@@ -70,6 +70,31 @@ void MatchListScene::draw_buttons(void) const {
 		cnt++;
 	}
 }
+Rect MatchListScene::draw_button_rect(Rect rect, HSV button_color, const HSV&shadow_color)const {
+	Vec2 shadow{ 0, rect.h / 10 };
+	if (rect.mouseOver()) {
+		button_color = button_color.setS(button_color.s * 4  / 5);
+	}
+	if(rect.leftPressed()){
+		rect = rect.stretched(-rect.h / 5, 0, shadow.y, 0);
+		rect.rounded(10).draw(button_color);
+	}else {
+		rect.rounded(10).drawShadow(shadow, 5, 0, shadow_color).draw(button_color);
+	}
+	return rect;
+}
+void MatchListScene::draw_button_label(const String &label, const Rect &rect, const Font &font, const HSV &color)const {
+	int left = 0, right = 1000;
+	while (Abs(right - left) > 1) {
+		int mid = (left + right) / 2;
+		if (font(label).draw(mid, rect.stretched(-rect.h / 20), HSV{ 0,0 })) {
+			left = mid;
+		}else{
+			right = mid;
+		}
+	}
+	font(label).drawAt(left, rect.center(), color);
+}
 void MatchListScene::draw_images(void)const {
 	// 戻るボタン
 	image_return.resized(image_radius*2).draw(anchor_return_button);
