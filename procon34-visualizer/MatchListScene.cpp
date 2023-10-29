@@ -10,13 +10,14 @@ MatchListScene::MatchListScene(const InitData &init) :IScene(init) {
 			matches << matchcsv;
 		}
 	}
-	update();
+	update_responsive();
 }
 
 void MatchListScene::update(void){
 	update_responsive();
 	update_buttons();
 	update_scroll();
+	if(frame_cnt <= 1) frame_cnt++;
 }
 
 void MatchListScene::draw(void)const {
@@ -29,8 +30,7 @@ void MatchListScene::update_buttons(void) {
 	for (const MatchCSV& matchcsv : matches) {
 		Rect button_rect = get_rect_button(cnt);
 		if (button_rect.mouseOver()) {
-			Cursor::SetDefaultStyle(CursorStyle::Hand);
-			if (button_rect.leftClicked()) {
+			if (frame_cnt > 1 and button_rect.leftReleased()) {
 				getData().set_match_id(matchcsv.match_id);
 				getData().set_field_type(matchcsv.field_type);
 				changeScene(U"FieldScene", 0s);
@@ -64,8 +64,8 @@ void MatchListScene::draw_buttons(void) const {
 	int cnt = 0;
 	for(const MatchCSV &matchcsv : matches ){
 		Rect button_rect = get_rect_button(cnt);
-		button_rect.draw(button_color).drawFrame(1, 1, Palette::Black);
-		const String button_lebel = ((matchcsv.match_id % 2 == 1) ? U"先: {} VS {} :後"_fmt : U"後: {} VS {} :先"_fmt)(matchcsv.team1, matchcsv.team2);
+		button_rect.rounded(10).draw(button_color).drawFrame(1, 1, Palette::Black);
+		const String button_lebel = ((matchcsv.match_id % 2 == 1) ? U"(先){} VS {}(後)"_fmt : U"(後){} VS {}(先)"_fmt)(matchcsv.team1, matchcsv.team2);
 		// ボタンの四角形の中に収まる最大のフォントサイズを二分探索
 		int left = 0, right = 1000;
 		while (Abs(right - left) > 1) {
@@ -87,12 +87,12 @@ void MatchListScene::draw_images(void)const {
 
 Rect MatchListScene::get_rect_button(const int cnt) const {
 	int x = Scene::Center().x;
+	int blank = Scene::Size().x / 25;
 	int y = button_height * ((cnt / 2)) + button_blank_y * ((cnt / 2) + 1) - scroll_idx * (button_height + button_blank_y);
 	if (cnt % 2 == 0) {
-		return Rect{ Arg::topRight(x,y), button_width, button_height };
-	}
-	else {
-		return Rect{ Arg::topLeft(x,y), button_width, button_height };
+		return Rect{ Arg::topRight(x-blank, y), button_width, button_height };
+	}else {
+		return Rect{ Arg::topLeft(x+blank, y), button_width, button_height };
 	}
 }
 

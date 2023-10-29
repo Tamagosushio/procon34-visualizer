@@ -38,6 +38,8 @@ private:
 	int image_radius = button_height / 2;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
 	const Texture image_return = Texture(Resource(U"./images/return.png"));
+	// シーンが開始されてから数フレームはマウスのクリック関連に不具合がある？
+	int frame_cnt = 0;
 };
 
 
