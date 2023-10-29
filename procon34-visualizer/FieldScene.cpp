@@ -241,7 +241,7 @@ void FieldScene::update_responsive(void) {
 	this->font_size = cell_size * height / 2 / 5;
 	this->anchor_play_button = Arg::topCenter(Scene::Center().x, blank_top);
 	this->anchor_return_button = Arg::bottomLeft(cell_size, Scene::Size().y - cell_size);
-	this->graph_lefttop = Vec2(Scene::Center().x + cell_size*2, cell_size * height * 0.75);
+	this->graph_lefttop = Vec2(Scene::Center().x + cell_size*2, cell_size * height * 0.75 + cell_size);
 	this->graph_size = Size(Scene::Size().x - (int)graph_lefttop.x - cell_size, Scene::Size().y - (int)graph_lefttop.y - cell_size);
 }
 
