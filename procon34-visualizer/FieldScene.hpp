@@ -52,22 +52,27 @@ private:
 	// フィールドの左上に開ける余白
 	int blank_left = 50;
 	int blank_top = 50;
-	// 再生、停止、戻るボタンの画像
+	// ボタンの画像
 	const Texture image_play = Texture(Resource(U"./images/play.png"));
 	const Texture image_stop = Texture(Resource(U"./images/stop.png"));
 	const Texture image_return = Texture(Resource(U"./images/return.png"));
+	const Texture image_arrow_left = Texture(Resource(U"./images/arrow_left.png"));
+	const Texture image_arrow_right = Texture(Resource(U"./images/arrow_right.png"));
 	int image_radius;
 	// 詳細表示のフォント
 	int font_size = 100;
 	const Font font_details = Font(FontMethod::SDF, font_size, Resource(U"SourceHanSansJP-Bold.otf"));
 	Arg::topCenter_<Vec2> anchor_play_button;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
+	Arg::rightCenter_<Vec2> anchor_arrow_left;
+	Arg::leftCenter_<Vec2> anchor_arrow_right;
 	// グラフ描画
 	Array<Array<int>> points;
 	Vec2 graph_lefttop;
 	Size graph_size;
 	int graph_scale = 3;
-	double line_thick = 1.5;
+	double graph_line_thick = 1.5;
+	ColorF graph_scale_color{ 0.0, 0.5 };
 
 	// グリッド上の中心座標、四角形、円を取得
 	const Point get_cell_center(const Point& p) const;

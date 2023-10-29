@@ -74,12 +74,19 @@ void FieldScene::update_gui(void) {
 	if (Circle(anchor_return_button, image_radius).leftClicked()) {
 		changeScene(U"MatchListScene", 0s);
 	}
-	// GUIによるターン遷移
+	// スライダーによるターン遷移
 	double turn_rate = (double)turn_num_now / (double)turn_num_limit;
 	if (SimpleGUI::Slider(turn_rate, { 0,0 }, Scene::Size().x)) {
 		turn_num_now = turn_rate * turn_num_limit;
 		// GUIの操作中は時間経過のターン遷移を行わない
 		stopwatch.restart();
+	}
+	// ボタンによるターン遷移
+	if (Circle(anchor_arrow_left, image_radius * 0.75).leftClicked()) {
+		turn_num_now = Max(turn_num_now - 1, 0);
+	}
+	if (Circle(anchor_arrow_right, image_radius * 0.75).leftClicked()) {
+		turn_num_now = Min(turn_num_now + 1, turn_num_limit);
 	}
 }
 // フィールド更新
@@ -180,7 +187,7 @@ void FieldScene::draw_details(void) const {
 	Scores scores_first = turns[turn_num_now].scores[0];
 	Scores scores_second = turns[turn_num_now].scores[1];
 
-	int x = Scene::Center().x + cell_size*2;
+	int x = Scene::Center().x + cell_size*5;
 	font_details(U"{}: {}pt"_fmt(team1, scores_first.wall_score + scores_first.territory_score + scores_first.castle_score))
 		.draw(font_size, x, blank_top, Palette::Red);
 	font_details(U"城壁:{}  陣地:{}  城:{}"_fmt(scores_first.wall_score/10, scores_first.territory_score/30, scores_first.castle_score/100))
@@ -198,15 +205,27 @@ void FieldScene::draw_images(void) const {
 	(is_paused ? image_play : image_stop).resized(image_radius*2).draw(anchor_play_button);
 	// 戻るボタン
 	image_return.resized(image_radius*2).draw(anchor_return_button);
+	// 矢印
+	image_arrow_left.resized(image_radius * 1.5).draw(anchor_arrow_left);
+	image_arrow_right.resized(image_radius * 1.5).draw(anchor_arrow_right);
 }
 void FieldScene::draw_graph() const {
 	// 背景
 	RectF background{ graph_lefttop, graph_size };
-	// 範囲内での最大値を求める
+	// 範囲内での得点の最大値を求める
 	int max_point = 0;
 	for(int idx = 0; idx <= turn_num_now; idx++){
 		for (const int &num : points[idx]) {
 			max_point = Max(max_point, num);
+		}
+	}
+	// 範囲内でのターンごとの得点の差の最大値を求める
+	Array<std::pair<int, int>> max_diff = { { 0,0 }, {0,0} };
+	for (int idx = 0; idx <= turn_num_now - 1; idx++) {
+		for (int team = 0; team <= 1; team++) {
+			if (Abs(points[idx][team] - points[idx + 1][team]) > max_diff[team].first) {
+				max_diff[team] = {Abs(points[idx][team] - points[idx + 1][team]), idx};
+			}
 		}
 	}
 	// 各ターン各チームの得点に対する座標を計算
@@ -222,31 +241,40 @@ void FieldScene::draw_graph() const {
 	}
 	// 座標から線分で結ぶ
 	for(int idx = 0; idx <= turn_num_now -1; idx++){
-		Line{ coordinates[idx][0], coordinates[idx + 1][0] }.draw(line_thick, Palette::Red);
-		Line{ coordinates[idx][1], coordinates[idx + 1][1] }.draw(line_thick, Palette::Blue);
+		Line{ coordinates[idx][0], coordinates[idx + 1][0] }.draw(graph_line_thick, Palette::Red);
+		Line{ coordinates[idx][1], coordinates[idx + 1][1] }.draw(graph_line_thick, Palette::Blue);
 	}
-	// 目盛りの点線を描画
+	// 縦軸の目盛りを描画
 	for (int i = 0; i < graph_scale; i++) {
 		const double y = background.topY() + graph_size.y * i / graph_scale ;
 		const int scale = (int)(max_point * ((double)(graph_scale - i) / (double(graph_scale))));
 		font_details(scale).draw(cell_size, Arg::rightCenter(background.leftX() - cell_size / 2, y), Palette::Black);
-		Line{ background.rightX(), y, background.leftX(), y}.draw(line_thick / 2, Color(0, 0, 0, 127));
+		Line{ background.rightX(), y, background.leftX(), y}.draw(graph_line_thick / 2, graph_scale_color);
+	}
+	// 横軸の目盛りを描画
+	for (int team = 0; team <= 1; team++) {
+		const double x = background.leftX() + background.w * (double)max_diff[team].second / (double)turn_num_now;
+		const double y = background.bottomY() + cell_size * team;
+		Line{ x, y, x, background.topY() }.draw(graph_line_thick / 2, graph_scale_color);
+		font_details(max_diff[team].second).draw(cell_size, Arg::topCenter(x, y), Palette::Black);
 	}
 	// 縦軸横軸の矢印を描画
-	background.left().drawArrow(line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
-	background.bottom().reverse().drawArrow(line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
+	background.left().drawArrow(graph_line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
+	background.bottom().reverse().drawArrow(graph_line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
 }
 
 
 void FieldScene::update_responsive(void) {
-	this->cell_size = Min(Scene::Center().x / (width + 4), Scene::Size().y * 2 / 3 / height);
+	this->cell_size = Min(Scene::Center().x / (width + 6), Scene::Size().y * 2 / 3 / height);
 	this->blank_left = cell_size * 2;
 	this->image_radius = cell_size;
 	this->font_size = cell_size * height / 2 / 5;
 	this->anchor_play_button = Arg::topCenter(Scene::Center().x, blank_top);
 	this->anchor_return_button = Arg::bottomLeft(cell_size, Scene::Size().y - cell_size);
+	this->anchor_arrow_left = Arg::rightCenter(Scene::Center().x - image_radius*2, blank_top + image_radius);
+	this->anchor_arrow_right = Arg::leftCenter(Scene::Center().x + image_radius*2, blank_top + image_radius);
 	this->graph_lefttop = Vec2(Scene::Center().x + cell_size*2, cell_size * height * 0.75 + cell_size);
-	this->graph_size = Size(Scene::Size().x - (int)graph_lefttop.x - cell_size, Scene::Size().y - (int)graph_lefttop.y - cell_size);
+	this->graph_size = Size(Scene::Size().x - (int)graph_lefttop.x - cell_size, Scene::Size().y - (int)graph_lefttop.y - cell_size*3);
 }
 
 // フィールドの座標を引数に、セルの中心の画面上の座標を返す
