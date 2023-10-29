@@ -13,7 +13,7 @@ MatchNameListScene::MatchNameListScene(const InitData& init) : IScene(init) {
 }
 
 void MatchNameListScene::update(void) {
-	int cnt = 1;
+	int cnt = 0;
 	update_responsive();
 	for (auto iter = st.begin(); iter != st.end(); iter++, cnt++) {
 			Rect rect{ Arg::topCenter(Scene::Center().x, button_blank * (cnt + 1) + button_height * cnt), Size{button_width, button_height} };
