@@ -200,8 +200,10 @@ void FieldScene::draw_images(void) const {
 	image_return.resized(image_radius*2).draw(anchor_return_button);
 }
 void FieldScene::draw_graph() const {
+	// 背景
+	RectF background{ graph_lefttop, graph_size };
 	// 範囲内での最大値を求める
-	int max_point = 1;
+	int max_point = 0;
 	for(int idx = 0; idx <= turn_num_now; idx++){
 		for (const int &num : points[idx]) {
 			max_point = Max(max_point, num);
@@ -212,8 +214,8 @@ void FieldScene::draw_graph() const {
 	for(int idx = 0; idx <= turn_num_now; idx++){
 		Array<Vec2> ary;
 		for(const int &num : points[idx]){
-			const double x = (double)graph_lefttop.x + (double)graph_size.x * ((double)idx / (double)turn_num_now);
-			const double y = (double)graph_lefttop.y + (double)graph_size.y - (double)graph_size.y * ((double)num / (double)max_point);
+			const double x = background.leftX() + background.w * (double)idx / (double)turn_num_now;
+			const double y = background.topY() + background.h - background.h * (double)num / (double)max_point;
 			ary << Vec2(x, y);
 		}
 		coordinates << ary;
@@ -225,12 +227,14 @@ void FieldScene::draw_graph() const {
 	}
 	// 目盛りの点線を描画
 	for (int i = 0; i < graph_scale; i++) {
-		font_details((int)(max_point * ((double)(graph_scale - i) / (double)graph_scale))).draw(cell_size, Arg::rightCenter(graph_lefttop.x - cell_size/2, graph_lefttop.y + graph_size.y * i / graph_scale), Palette::Black);
-		Line{ graph_lefttop.x, graph_lefttop.y + graph_size.y * i / graph_scale, graph_lefttop.x + graph_size.x, graph_lefttop.y + graph_size.y * i / graph_scale }.draw(line_thick / 2, Color(0,0,0,127));
+		const double y = background.topY() + graph_size.y * i / graph_scale ;
+		const int scale = (int)(max_point * ((double)(graph_scale - i) / (double(graph_scale))));
+		font_details(scale).draw(cell_size, Arg::rightCenter(background.leftX() - cell_size / 2, y), Palette::Black);
+		Line{ background.rightX(), y, background.leftX(), y}.draw(line_thick / 2, Color(0, 0, 0, 127));
 	}
 	// 縦軸横軸の矢印を描画
-	Line{ graph_lefttop.x, graph_lefttop.y + graph_size.y, graph_lefttop.x, graph_lefttop.y }.drawArrow(line_thick*2, Vec2{ cell_size, cell_size }, Palette::Black);
-	Line{ graph_lefttop.x, graph_lefttop.y + graph_size.y, graph_lefttop.x + graph_size.x, graph_lefttop.y + graph_size.y }.drawArrow(line_thick*2, Vec2{ cell_size, cell_size }, Palette::Black);
+	background.left().drawArrow(line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
+	background.bottom().reverse().drawArrow(line_thick * 2, Vec2{cell_size, cell_size}, Palette::Black);
 }
 
 
