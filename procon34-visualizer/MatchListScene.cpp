@@ -44,11 +44,11 @@ void MatchListScene::update_buttons(void) {
 }
 void MatchListScene::update_scroll(void) {
 	// スクロールは上下で制限をかける
-	if (Mouse::Wheel() > 0) {
+	if (Mouse::Wheel() > 0 or Circle(anchor_arrow_bottom, image_radius).leftClicked()) {
 		double numerator = (double)button_height * ((double)matches.size() / 2.0) + (double)button_blank_y * ((double)matches.size() / 2.0 + 1.0) - (double)Scene::Size().y;
 		double denominator = (double)button_height + (double)button_blank_y;
 		scroll_idx = Max<int>(Min<int>(scroll_idx + 1, Math::Ceil(numerator / denominator)), 0);
-	}else if (Mouse::Wheel() < 0) {
+	}else if (Mouse::Wheel() < 0 or Circle(anchor_arrow_top, image_radius).leftClicked()) {
 		scroll_idx = Max<int>(scroll_idx - 1, 0);
 	}
 }
@@ -57,6 +57,8 @@ void MatchListScene::update_responsive(void) {
 	this->button_height = Scene::Size().y / 10;
 	this->button_blank_y = button_height / 3;
 	this->anchor_return_button = Arg::bottomLeft(button_blank_y, Scene::Size().y - button_blank_y);
+	this->anchor_arrow_top = Arg::bottomRight(Scene::Size().x - button_blank_y, Scene::Center().y - button_blank_y);
+	this->anchor_arrow_bottom = Arg::topRight(Scene::Size().x - button_blank_y, Scene::Center().y + button_blank_y);
 	this->image_radius = button_height / 2;
 }
 
@@ -73,6 +75,9 @@ void MatchListScene::draw_buttons(void) const {
 void MatchListScene::draw_images(void)const {
 	// 戻るボタン
 	image_return.resized(image_radius*2).draw(anchor_return_button);
+	// スクロールボタン
+	image_arrow_top.resized(image_radius * 2).draw(anchor_arrow_top);
+	image_arrow_bottom.resized(image_radius * 2).draw(anchor_arrow_bottom);
 }
 
 Rect MatchListScene::get_rect_button(const int cnt) const {

@@ -38,7 +38,11 @@ private:
 	// 戻るボタン
 	int image_radius = button_height / 2;
 	Arg::bottomLeft_<Vec2> anchor_return_button;
+	Arg::bottomRight_<Vec2> anchor_arrow_top;
+	Arg::topRight_<Vec2> anchor_arrow_bottom;
 	const Texture image_return = Texture(Resource(U"./images/return.png"));
+	const Texture image_arrow_top = Texture(Resource(U"./images/arrow_top.png"));
+	const Texture image_arrow_bottom = Texture(Resource(U"./images/arrow_bottom.png"));
 	// シーンが開始されてから数フレームはマウスのクリック関連に不具合がある？
 	int frame_cnt = 0;
 };
