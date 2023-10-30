@@ -56,10 +56,12 @@ void MatchListScene::update_responsive(void) {
 	this->button_width = Scene::Size().x / 3;
 	this->button_height = Scene::Size().y / 10;
 	this->button_blank_y = button_height / 3;
-	this->anchor_return_button = Arg::bottomLeft(button_blank_y, Scene::Size().y - button_blank_y);
-	this->anchor_arrow_top = Arg::bottomRight(Scene::Size().x - button_blank_y, Scene::Center().y - button_blank_y);
-	this->anchor_arrow_bottom = Arg::topRight(Scene::Size().x - button_blank_y, Scene::Center().y + button_blank_y);
-	this->image_radius = button_height / 2;
+	int side_button_width = button_width / 10;
+	int side_button_height = button_height / 2;
+	this->anchor_return_button = Arg::bottomLeft(side_button_width, Scene::Size().y - side_button_height);
+	this->anchor_arrow_top = Arg::bottomRight(Scene::Size().x - side_button_width, Scene::Center().y - side_button_height);
+	this->anchor_arrow_bottom = Arg::topRight(Scene::Size().x - side_button_width, Scene::Center().y + side_button_height);
+	this->image_radius = (side_button_width*0.75 + side_button_height*1.25) / 2;
 }
 
 void MatchListScene::draw_buttons(void) const {
@@ -82,7 +84,7 @@ void MatchListScene::draw_images(void)const {
 
 Rect MatchListScene::get_rect_button(const int cnt) const {
 	int x = Scene::Center().x;
-	int blank = Scene::Size().x / 25;
+	int blank = Scene::Size().x / 50;
 	int y = button_height * ((cnt / 2)) + button_blank_y * ((cnt / 2) + 1) - scroll_idx * (button_height + button_blank_y);
 	if (cnt % 2 == 0) {
 		return Rect{ Arg::topRight(x-blank, y), button_width, button_height };

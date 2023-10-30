@@ -7,7 +7,7 @@
 
 void Main(){
 
-	Window::Resize(1280, 720);
+	Window::Resize(450, 1000);
 	Window::SetStyle(WindowStyle::Sizable);
 	Scene::SetBackground(Palette::Silver);
 
