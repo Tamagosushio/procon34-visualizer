@@ -17,11 +17,12 @@ void MatchNameListScene::update(void) {
 	update_responsive();
 	for (auto iter = st.begin(); iter != st.end(); iter++, cnt++) {
 			Rect rect{ Arg::topCenter(Scene::Center().x, button_blank * (cnt + 1) + button_height * cnt), Size{button_width, button_height} };
-			if (rect.leftReleased()) {
+			if (frame_cnt > 1 and rect.leftReleased()) {
 				getData().set_match_name(*iter);
 				changeScene(U"MatchListScene", 0s);
 			}
 	}
+	if (frame_cnt <= 1) frame_cnt++;
 }
 
 void MatchNameListScene:: update_responsive(void) {

@@ -16,5 +16,7 @@ private:
 	LoadMatches loadmatches;
 	Array<String> st;\
 	Font font_button{ FontMethod::SDF, 50, Resource(U"SourceHanSansJP-Medium.otf") };
+	// シーンが開始されてから数フレームはマウスのクリック関連に不具合がある？
+	int frame_cnt = 0;
 };
 
