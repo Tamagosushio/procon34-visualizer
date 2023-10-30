@@ -70,7 +70,7 @@ void MatchListScene::draw_buttons(void) const {
 		Rect button_rect = get_rect_button(cnt);
 		button_rect = draw_button_rect(button_rect, button_color, button_shadow_color);
 		const String button_label = ((matchcsv.match_id % 2 == 1) ? U"(先){} VS {}(後)"_fmt : U"(後){} VS {}(先)"_fmt)(matchcsv.team1, matchcsv.team2);
-		draw_button_label(button_label, button_rect, font_button, Palette::White);
+		draw_button_label(button_label, button_rect, font_button, Palette::White, true);
 		cnt++;
 	}
 }

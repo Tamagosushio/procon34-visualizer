@@ -7,8 +7,10 @@
 
 void Main(){
 
-	Window::Resize(450, 1000);
+	Window::Resize(1280, 720);
 	Window::SetStyle(WindowStyle::Sizable);
+	Scene::SetResizeMode(ResizeMode::Virtual);
+	Window::SetTitle(U"procon34-visualizer");
 	Scene::SetBackground(Palette::Silver);
 
 	App manager;
