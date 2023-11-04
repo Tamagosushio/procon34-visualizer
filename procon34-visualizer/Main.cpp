@@ -5,9 +5,12 @@
 # include "MatchListScene.hpp"
 # include "FieldScene.hpp"
 
-void Main(){
+void Main() {
 
+<<<<<<< Updated upstream
 	Window::Resize(1280, 720);
+=======
+>>>>>>> Stashed changes
 	Window::SetStyle(WindowStyle::Sizable);
 	Scene::SetResizeMode(ResizeMode::Virtual);
 	Window::SetTitle(U"procon34-visualizer");
@@ -21,7 +24,7 @@ void Main(){
 	manager.init(U"MatchNameListScene");
 
 
-	while (System::Update()){
+	while (System::Update()) {
 		if (not manager.update()) {
 			break;
 		}
