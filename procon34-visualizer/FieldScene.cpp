@@ -57,7 +57,11 @@ void FieldScene::update_turn(void) {
 		if (not stopwatch.isStarted()) {
 			stopwatch.start();
 		}
-		if (stopwatch.ms() > time_step) {
+		if (turn_num_now == turn_num_limit and stopwatch.ms() > time_step * 10) {
+			turn_num_now = 0;
+			stopwatch.restart();
+		}
+		if (turn_num_now != turn_num_limit and stopwatch.ms() > time_step) {
 			turn_num_now = Min(turn_num_now + 1, turn_num_limit);
 			stopwatch.restart();
 		}
